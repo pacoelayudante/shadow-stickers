@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/slider": "^2.0.9",
+    "expo-asset": "^8.0.0",
     "expo-gl": "^8.0.0",
     "expo-gl-cpp": "^8.0.0",
     "react": "16.9.0",
