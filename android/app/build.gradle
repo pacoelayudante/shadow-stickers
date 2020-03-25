@@ -180,7 +180,7 @@ android {
 }
 
 dependencies {
-    addUnimodulesDependencies()
+    addUnimodulesDependencies([exclude: ['expo-face-detector','unimodules-app-loader']])
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
