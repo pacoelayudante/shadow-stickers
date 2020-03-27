@@ -51,7 +51,7 @@ const Estilos = StyleSheet.create({
         marginVertical: Tamanos.anchoLineaBase * 0.2,
     },
     listaBasica: {
-        backgroundColor: Colores.negro,
+        // backgroundColor: Colores.negro,
         flexGrow: 1,
         color: Colores.claro,
     },

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Image, TouchableHighlight, ImageBackground, TouchableOpacity } from 'react-native';
 import * as G from './Globales';
+import LinearGradient from 'react-native-linear-gradient';
 
 class NuevoPaquete extends Component {
     render() {
@@ -35,7 +36,10 @@ export default class MenuStickers extends React.Component {
 
         return (<View style={G.Estilos.programa}>
             <ImageBackground style={G.Estilos.cabezeraBasica} source={G.Img.logo} imageStyle={G.Estilos.imagenContenida} />
-            <ScrollView style={G.Estilos.listaBasica}>{paquetesRender}</ScrollView>
+            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                    colors={[G.Colores.negro, G.Colores.oscuro]} style={{flexGrow:1}}>
+                <ScrollView style={G.Estilos.listaBasica}>{paquetesRender}</ScrollView>
+            </LinearGradient>
         </View>);
     }
 }

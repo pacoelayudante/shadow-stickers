@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Button, TextInput, ImageBackground, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import * as G from './Globales';
+import LinearGradient from 'react-native-linear-gradient';
 
 const regexEmoji = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g;
 const soloEmojis = (texto) => {
@@ -91,7 +92,10 @@ export default class EditorPaquete extends React.Component {
                 <ImageBackground style={[G.Estilos.cabezeraBasica]} imageStyle={G.Estilos.imagenContenida} source={icono}>
                     <TouchableOpacity onPress={() => this.props.abrirPaquete(null)}><Text style={[G.Estilos.textoIcono]}>↶</Text></TouchableOpacity>
                 </ImageBackground>
-                <ScrollView contentContainerStyle={[G.Estilos.listaBasica, G.Estilos.listaStickers]}>{stickersRender}</ScrollView>
+                <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                        colors={[G.Colores.negro, G.Colores.oscuro]} style={{flexGrow:1}}>
+                    <ScrollView contentContainerStyle={[G.Estilos.listaBasica, G.Estilos.listaStickers]}>{stickersRender}</ScrollView>
+                </LinearGradient>
             </View>);
     }
 }
