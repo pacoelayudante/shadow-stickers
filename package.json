@@ -14,10 +14,10 @@
     "expo-gl": "^8.1.0",
     "expo-gl-cpp": "^8.1.0",
     "react": "16.9.0",
-    "react-native": "0.61.5",
+    "react-native": "^0.61.5",
     "react-native-color-picker": "^0.5.2",
     "react-native-linear-gradient": "^2.5.6",
-    "react-native-unimodules": "^0.8.1"
+    "react-native-unimodules": "^0.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

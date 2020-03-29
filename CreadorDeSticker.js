@@ -6,8 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { ColorPicker, toHsv, fromHsv } from 'react-native-color-picker';
 import { GLView } from 'expo-gl';
 import { Asset } from 'react-native-unimodules';
-import './overrideRemoteImageResolver';
-// import {AppLoading} from "expo";
+// import './overrideRemoteImageResolver';
 
 const pjs = ['demonhead', 'shadowsis', 'shaman', 'witch'];
 const variantes = ['base', 'gana', 'pierde'];
@@ -188,10 +187,9 @@ const cargarPersonaje = function (pj, variante, index) {
         return;
     }
     const kinAsset = G.Img.Skins[generarStringImagen(pj, variante, colores[index])];
-    console.log("LOADING "+generarStringImagen(pj, variante, colores[index]));
     const assetFromMod = Asset.fromModule(kinAsset);
     assetFromMod.downloadAsync().then(() => {
-        imagenData[index] = assetFromMod;
+            imagenData[index] = assetFromMod;
             // imagenData[index] = Image.resolveAssetSource(kinAsset);
             // imagenData[index].localUri = imagenData[index].uri;
             if (gl) {
