@@ -5,7 +5,9 @@ import Slider from '@react-native-community/slider';
 import LinearGradient from 'react-native-linear-gradient';
 import { ColorPicker, toHsv, fromHsv } from 'react-native-color-picker';
 import { GLView } from 'expo-gl';
-import { Asset } from 'expo-asset';
+import { Asset } from 'react-native-unimodules';
+import './overrideRemoteImageResolver';
+// import {AppLoading} from "expo";
 
 const pjs = ['demonhead', 'shadowsis', 'shaman', 'witch'];
 const variantes = ['base', 'gana', 'pierde'];
@@ -186,10 +188,12 @@ const cargarPersonaje = function (pj, variante, index) {
         return;
     }
     const kinAsset = G.Img.Skins[generarStringImagen(pj, variante, colores[index])];
-    Asset.loadAsync(kinAsset).then(resultado => {
-            imagenData[index] = Image.resolveAssetSource(kinAsset);
-            imagenData[index].localUri = imagenData[index].uri;
-
+    console.log("LOADING "+generarStringImagen(pj, variante, colores[index]));
+    const assetFromMod = Asset.fromModule(kinAsset);
+    assetFromMod.downloadAsync().then(() => {
+        imagenData[index] = assetFromMod;
+            // imagenData[index] = Image.resolveAssetSource(kinAsset);
+            // imagenData[index].localUri = imagenData[index].uri;
             if (gl) {
                 gl.activeTexture([gl.TEXTURE0, gl.TEXTURE1][index]);
                 gl.bindTexture(gl.TEXTURE_2D, texturas[index]);
@@ -281,7 +285,7 @@ export default class CreadorDeSticker extends React.Component {
         const paquete = this.props.paquete;
         const sticker = this.props.sticker;
         const glYa = gl;
-        GLView.takeSnapshotAsync(glYa, { fromat: 'webp' })
+        GLView.takeSnapshotAsync(glYa, { format: 'webp' })
             .then(({ uri, localUri, width, height }) => {
                 sticker.offX = offX;
                 sticker.offY = offY;
@@ -302,7 +306,7 @@ export default class CreadorDeSticker extends React.Component {
                 const offy = 0;
                 glYa.viewport(0,0,G.Tamanos.iconoMenor,G.Tamanos.iconoMenor);
                 actualizarImagen();
-                return GLView.takeSnapshotAsync(glYa, { fromat: 'png', rect: { x: offx, y: offy, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor } });
+                return GLView.takeSnapshotAsync(glYa, { format: 'png', rect: { x: offx, y: offy, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor } });
             })
             .then(({ uri, localUri, width, height }) => {
                 if (uri !== null) paquete.tray_image_file = localUri;

@@ -93,7 +93,7 @@ export default class EditorPaquete extends React.Component {
                     <TouchableOpacity onPress={() => this.props.abrirPaquete(null)}><Text style={[G.Estilos.textoIcono]}>↶</Text></TouchableOpacity>
                 </ImageBackground>
                 <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-                        colors={[G.Colores.negro, G.Colores.oscuro]} style={{flexGrow:1}}>
+                        colors={[G.Colores.blanco, G.Colores.oscuro]} style={{flexGrow:1}}>
                     <ScrollView contentContainerStyle={[G.Estilos.listaBasica, G.Estilos.listaStickers]}>{stickersRender}</ScrollView>
                 </LinearGradient>
             </View>);

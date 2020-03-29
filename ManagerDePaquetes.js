@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system';
+// import { FileSystem } from 'react-native-unimodules';
 // const prefijoPaquetes = 'paquete_';
 // const extensionPaquetes = '.json';
 const contenedorPaqueteBase = require('./contenedor_paquetes.json');
