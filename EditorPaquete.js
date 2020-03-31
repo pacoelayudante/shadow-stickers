@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ScrollView, Text, Button, TextInput, ImageBackground, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import * as G from './Globales';
 import LinearGradient from 'react-native-linear-gradient';
+import { GetTrayIconUri, GetStickerImageUri } from './ManagerDePaquetes';
 
 const regexEmoji = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g;
 const soloEmojis = (texto) => {
@@ -15,17 +16,17 @@ const soloEmojis = (texto) => {
     return resultado.slice(0, 3);//.join('');// 3 es el limite de emojis
 };
 
-const generarTrayIcon = (sticker, callback) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = 96;
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.addEventListener('load', () => {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-        callback(canvas.toDataURL('image/png'));
-    }, false);
-    img.src = sticker.image_file;
-};
+// const generarTrayIcon = (sticker, callback) => {
+//     const canvas = document.createElement('canvas');
+//     canvas.width = canvas.height = 96;
+//     const ctx = canvas.getContext('2d');
+//     const img = new Image();
+//     img.addEventListener('load', () => {
+//         ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+//         callback(canvas.toDataURL('image/png'));
+//     }, false);
+//     img.src = sticker.image_file;
+// };
 
 class NuevoSticker extends Component {
     render() {
@@ -62,7 +63,9 @@ class EditarSticker extends Component {
     }
 
     render() {
-        const sticker = { uri: this.props.sticker.image_file, width: G.Tamanos.sticker, height: G.Tamanos.sticker };
+        const uri = GetStickerImageUri(this.props.paquete,this.props.sticker);
+        const sticker = { uri: uri, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
+        // const sticker = { uri: this.props.sticker.image_file, width: G.Tamanos.sticker, height: G.Tamanos.sticker };
 
         return (
             <TouchableHighlight onPress={() => this.props.abrirSticker(this.props.sticker)} style={G.Estilos.editarSticker}>
@@ -82,9 +85,11 @@ export default class EditorPaquete extends React.Component {
     };
 
     render() {
-        const icono = { uri: this.props.paquete.tray_image_file, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
+        const paquete = this.props.paquete;
+        const icono = { uri: GetTrayIconUri(this.props.paquete), width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
+        // const icono = { uri: this.props.paquete.tray_image_file, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
 
-        let stickersRender = this.props.paquete.stickers.map(sticker => <EditarSticker key={sticker.image_file} sticker={sticker} borrarSticker={this.onBorrarSticker} abrirSticker={this.props.abrirSticker} actualizar={()=>this.props.actualizarPaquete(this.props.paquete)}/>);
+        let stickersRender = this.props.paquete.stickers.map(sticker => <EditarSticker key={sticker.image_file} sticker={sticker} paquete={paquete} borrarSticker={this.onBorrarSticker} abrirSticker={this.props.abrirSticker} actualizar={()=>this.props.actualizarPaquete(this.props.paquete)}/>);
         stickersRender.push(<NuevoSticker key={null} nuevoSticker={this.props.nuevoSticker}/>);
 
         return (
@@ -92,10 +97,10 @@ export default class EditorPaquete extends React.Component {
                 <ImageBackground style={[G.Estilos.cabezeraBasica]} imageStyle={G.Estilos.imagenContenida} source={icono}>
                     <TouchableOpacity onPress={() => this.props.abrirPaquete(null)}><Text style={[G.Estilos.textoIcono]}>↶</Text></TouchableOpacity>
                 </ImageBackground>
-                <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-                        colors={[G.Colores.blanco, G.Colores.oscuro]} style={{flexGrow:1}}>
-                    <ScrollView contentContainerStyle={[G.Estilos.listaBasica, G.Estilos.listaStickers]}>{stickersRender}</ScrollView>
-                </LinearGradient>
+                <ScrollView><LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                        colors={[G.Colores.negro, G.Colores.oscuro]} style={[G.Estilos.listaBasica, G.Estilos.listaStickers]}>
+                    {stickersRender}
+                </LinearGradient></ScrollView>
             </View>);
     }
 }

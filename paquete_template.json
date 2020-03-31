@@ -1,8 +1,8 @@
 {
-    "identifier": null,
-    "name": null,
+    "identifier": "",
+    "name": "",
     "publisher": "Team Guazu",
-    "tray_image_file": null,
+    "tray_image_file": "",
     "image_data_version": "1",
     "avoid_cache": false,
     "publisher_email": "team.guazu@gmail.com",
@@ -20,7 +20,7 @@
             "offX": 256.0,
             "offY": 256.0,
             "zoom": 1.0,
-            "image_file": null,
+            "image_file": "",
             "emojis": ["💖"]
         }
     ]

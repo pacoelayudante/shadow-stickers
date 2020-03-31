@@ -3,14 +3,12 @@ import EditorPaquete from './EditorPaquete';
 import CreadorDeSticker from './CreadorDeSticker';
 import MenuStickers from './MenuStickers';
 import { GuardarEstadoContenedor, BuscarListaDePaquetes } from './ManagerDePaquetes';
-// import { GuardarPaquete, BuscarListaDePaquetes, BorrarPaquete } from './ManagerDePaquetes';
 
 import PaqueteTemplate from './paquete_template.json';
 // import RNWhatsAppStickers from 'react-native-whatsapp-stickers';
 
 export default class Programa extends React.Component {
     state = {
-        // todosLosPaquetes: null,
         contenedor: {sticker_packs:[]},
         paqueteEditado: -1,
         stickerEditado: -1,
@@ -18,12 +16,6 @@ export default class Programa extends React.Component {
 
     componentDidMount() {
         BuscarListaDePaquetes().then(contenedor=>this.setState({contenedor:contenedor})).catch(console.error);
-        // BuscarListaDePaquetes()
-        //     .then(paquetes => {
-        //         this.setState({todosLosPaquetes:paquetes});
-        //     })
-        //     .catch(console.log)
-        //     .finally(()=>console.log('termino'));
     }
 
     nuevoPaquete = ()=>{
@@ -32,6 +24,7 @@ export default class Programa extends React.Component {
         const todosLosPaquetes = contenedor.sticker_packs;
         nuevo.identifier = 'shadowsticker_' + todosLosPaquetes.length;
         todosLosPaquetes.push(nuevo);
+        nuevo.name = 'Shadow Brawlers ' + todosLosPaquetes.length;
         this.setState({
             contenedor: contenedor,
             paqueteEditado: todosLosPaquetes.length - 1,
@@ -67,7 +60,6 @@ export default class Programa extends React.Component {
 
     actualizarPaquete = (paquete)=>{
         const contenedor = this.state.contenedor;
-        // const todosLosPaquetes = contenedor.sticker_packs;
         GuardarEstadoContenedor(contenedor).catch(console.error);
         this.setState({
             contenedor: contenedor,
@@ -75,7 +67,6 @@ export default class Programa extends React.Component {
     };
 
     borrarPaquete = (paquete)=>{
-        // BorrarPaquete(paquete).catch(console.error);
         const contenedor = this.state.contenedor;
         const todosLosPaquetes = contenedor.sticker_packs.filter(cada=>cada !== paquete);
         contenedor.sticker_packs = todosLosPaquetes;        
@@ -90,7 +81,6 @@ export default class Programa extends React.Component {
     };
 
     render() {
-        // const paquetes = [PaqueteJSON_1, PaqueteJSON_2];
         const paquetes = this.state.contenedor.sticker_packs;
         const estePaquete = this.state.paqueteEditado === -1 ? null : paquetes[this.state.paqueteEditado];
         const esteSticker = this.state.stickerEditado === -1 ? null : estePaquete.stickers[this.state.stickerEditado];

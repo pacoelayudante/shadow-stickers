@@ -4,6 +4,7 @@ import * as G from './Globales';
 import Slider from '@react-native-community/slider';
 import LinearGradient from 'react-native-linear-gradient';
 import { ColorPicker, toHsv, fromHsv } from 'react-native-color-picker';
+import { GuardarEstiquer } from './ManagerDePaquetes';
 import { GLView } from 'expo-gl';
 import { Asset } from 'react-native-unimodules';
 // import './overrideRemoteImageResolver';
@@ -292,28 +293,26 @@ export default class CreadorDeSticker extends React.Component {
                 sticker.col2 = this.state.colorDetalle;
                 sticker.personaje = this.state.pjActual;
                 sticker.actitud = this.state.varianteActual;
-                sticker.image_file = localUri;
+                return GuardarEstiquer(localUri,paquete);
+            }).then((nuevoUri)=>{
+                sticker.image_file = nuevoUri;
                 return paquete.stickers[0] === sticker;
-            })
-            .then((dibujarTrayIcon) => {
+            }).then((dibujarTrayIcon) => {
                 if ( !dibujarTrayIcon ) return {uri:null,localUri:null,width:0,height:0};
-                // if (paquete.stickers[0] === sticker)
-                // const offx = G.Tamanos.sticker / 2.0 - G.Tamanos.iconoMenor / 2.0;
-                // const offy = G.Tamanos.sticker / 2.0 - G.Tamanos.iconoMenor / 2.0;
                 const offx = 0;
                 const offy = 0;
                 glYa.viewport(0,0,G.Tamanos.iconoMenor,G.Tamanos.iconoMenor);
                 actualizarImagen();
                 return GLView.takeSnapshotAsync(glYa, { format: 'png', rect: { x: offx, y: offy, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor } });
-            })
-            .then(({ uri, localUri, width, height }) => {
-                if (uri !== null) paquete.tray_image_file = localUri;
+            }).then(({ uri, localUri, width, height }) => {
+                if (localUri === null) return null;
+                return GuardarEstiquer(localUri,paquete);
+            }).then((nuevoUri)=>{
+                if (nuevoUri !== null) paquete.tray_image_file = nuevoUri;
                 this.props.actualizarPaquete(paquete);
                 this.props.abrirSticker(null);
-                return localUri;
-            })
-            .catch(console.error);
-        // this.props.abrirSticker(null);
+                // return nuevoUri;
+            }).catch(console.error);
     }
     componentWillUnmount(){
         gl = null;

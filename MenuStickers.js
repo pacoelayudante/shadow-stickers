@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ScrollView, Text, Image, TouchableHighlight, ImageBackground, TouchableOpacity } from 'react-native';
 import * as G from './Globales';
 import LinearGradient from 'react-native-linear-gradient';
+import { GetTrayIconUri } from './ManagerDePaquetes';
 
 class NuevoPaquete extends Component {
     render() {
@@ -12,14 +13,14 @@ class NuevoPaquete extends Component {
 }
 class EditarPaqute extends Component {
     render() {
-        const icono = { uri: this.props.paquete.tray_image_file, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
+        const icono = { uri: GetTrayIconUri(this.props.paquete), width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
 
         return (
             <TouchableHighlight style={[G.Estilos.editarPaquete]} onPress={this.props.onClick}>
                 <>
                     <Image style={G.Estilos.iconoDeLinea} source={icono} />
-                    <Text style={[G.Estilos.textoBase, { flexGrow: 1 }]}>{this.props.paquete.identifier}</Text>
-                    <TouchableOpacity style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.renombrar} /></TouchableOpacity>
+                    <Text style={[G.Estilos.textoBase, { flexGrow: 1 }]}>{this.props.paquete.name}</Text>
+                    <TouchableOpacity onPress={()=>console.log(this.props.paquete)} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.renombrar} /></TouchableOpacity>
                     <TouchableOpacity onPress={()=>{this.props.vincularPaquete(this.props.paquete);}} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.vincular} /></TouchableOpacity>
                     <TouchableOpacity onPress={()=>{this.props.borrarPaquete(this.props.paquete);}} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.borrar} /></TouchableOpacity>
                 </>
@@ -36,10 +37,10 @@ export default class MenuStickers extends React.Component {
 
         return (<View style={G.Estilos.programa}>
             <ImageBackground style={G.Estilos.cabezeraBasica} source={G.Img.logo} imageStyle={G.Estilos.imagenContenida} />
-            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-                    colors={[G.Colores.negro, G.Colores.oscuro]} style={{flexGrow:1}}>
-                <ScrollView style={G.Estilos.listaBasica}>{paquetesRender}</ScrollView>
-            </LinearGradient>
+            <ScrollView><LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                    colors={[G.Colores.negro, G.Colores.oscuro]} style={G.Estilos.listaBasica}>
+                {paquetesRender}
+            </LinearGradient></ScrollView>
         </View>);
     }
 }

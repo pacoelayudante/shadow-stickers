@@ -1,27 +1,6 @@
 import * as FileSystem from 'expo-file-system';
-// import { FileSystem } from 'react-native-unimodules';
-// const prefijoPaquetes = 'paquete_';
-// const extensionPaquetes = '.json';
 const contenedorPaqueteBase = require('./contenedor_paquetes.json');
 const archivoContenedorPaquetes = 'content.json';
-
-// export const BorrarPaquete = (paquete) => {
-//     return new Promise((resolve, reject) => {
-//         const uri = FileSystem.documentDirectory + prefijoPaquetes + paquete.identifier + extensionPaquetes;
-//         return FileSystem.deleteAsync(uri)
-//             .then(resolve)
-//             .catch(reject);
-//     });
-// }
-
-// export const GuardarPaquete = (paquete) => {
-//     return new Promise((resolve, reject) => {
-//         const uri = FileSystem.documentDirectory + prefijoPaquetes + paquete.identifier + extensionPaquetes;
-//         return FileSystem.writeAsStringAsync(uri, JSON.stringify(paquete))
-//             .then(resolve)
-//             .catch(reject);
-//     });
-// };
 
 export const GuardarEstadoContenedor = (contenedor)=>{
     return new Promise((resolve, reject) => {
@@ -46,20 +25,14 @@ export const BuscarListaDePaquetes = () => {
         });
     }).catch(console.error);
 };
-// export const BuscarListaDePaquetes = () => {
-//     return new Promise((resolve, reject) => {
-//         return FileSystem.readDirectoryAsync(FileSystem.documentDirectory)
-//             .then(resultado => Promise.all(resultado
-//                 .filter(archivo => archivo.startsWith(prefijoPaquetes) && archivo.endsWith(extensionPaquetes))
-//                 .map(archivo => FileSystem.getInfoAsync(FileSystem.documentDirectory + archivo))
-//             ))
-//             .then(lasInfos => Promise.all(lasInfos
-//                 .filter(estaInfo => !estaInfo.isDirectory)
-//                 .map(estaInfo => FileSystem.readAsStringAsync(estaInfo.uri))
-//             ))
-//             .then(losStrings => {
-//                 resolve(losStrings.map(estaString => JSON.parse(estaString)));
-//             })
-//             .catch(reject);
-//     });
-// };
+
+export const GuardarEstiquer = (uriOrigen, paquete) => {    
+    const imageFile = uriOrigen.split('/').pop();
+    const uriCarpeta = FileSystem.documentDirectory + paquete.identifier;
+    const uriArchivo = uriCarpeta + '/' + imageFile;
+    return FileSystem.copyAsync({from:uriOrigen,to:uriArchivo})
+        .then(()=>imageFile);
+};
+
+export const GetTrayIconUri = (paquete) => FileSystem.documentDirectory + paquete.identifier + '/' + paquete.tray_image_file;
+export const GetStickerImageUri = (paquete,sticker) => FileSystem.documentDirectory + paquete.identifier + '/' + sticker.image_file;

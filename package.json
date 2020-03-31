@@ -17,7 +17,8 @@
     "react-native": "^0.61.5",
     "react-native-color-picker": "^0.5.2",
     "react-native-linear-gradient": "^2.5.6",
-    "react-native-unimodules": "^0.7.0"
+    "react-native-unimodules": "^0.7.0",
+    "react-native-whatsapp-stickers": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
