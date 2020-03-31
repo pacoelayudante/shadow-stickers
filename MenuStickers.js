@@ -14,14 +14,15 @@ class NuevoPaquete extends Component {
 class EditarPaqute extends Component {
     render() {
         const icono = { uri: GetTrayIconUri(this.props.paquete), width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
+        const color = this.props.hayWasap ? {} : {backgroundColor:G.Colores.oscuro};
 
         return (
             <TouchableHighlight style={[G.Estilos.editarPaquete]} onPress={this.props.onClick}>
                 <>
                     <Image style={G.Estilos.iconoDeLinea} source={icono} />
                     <Text style={[G.Estilos.textoBase, { flexGrow: 1 }]}>{this.props.paquete.name}</Text>
-                    <TouchableOpacity onPress={()=>console.log(this.props.paquete)} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.renombrar} /></TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.props.vincularPaquete(this.props.paquete);}} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.vincular} /></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>console.log(this.props.paquete)} style={[G.Estilos.botonConIcono]}><Image style={G.Estilos.iconoContenido} source={G.Img.renombrar} /></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>{this.props.vincularPaquete(this.props.paquete);}} style={[G.Estilos.botonConIcono,color]}><Image style={G.Estilos.iconoContenido} source={G.Img.vincular} /></TouchableOpacity>
                     <TouchableOpacity onPress={()=>{this.props.borrarPaquete(this.props.paquete);}} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.borrar} /></TouchableOpacity>
                 </>
             </TouchableHighlight>
@@ -31,8 +32,8 @@ class EditarPaqute extends Component {
 
 export default class MenuStickers extends React.Component {
     render() {
-        let paquetesRender = this.props.paquetes.map(paquete => <EditarPaqute key={paquete.identifier} paquete={paquete}
-            onClick={() => this.props.abrirPaquete(paquete)} borrarPaquete={this.props.borrarPaquete}/>);
+        let paquetesRender = this.props.paquetes.map(paquete => <EditarPaqute key={paquete.identifier} paquete={paquete} vincularPaquete={this.props.vincularPaquete}
+            onClick={() => this.props.abrirPaquete(paquete)} borrarPaquete={this.props.borrarPaquete} hayWasap={this.props.hayWasap}/>);
         paquetesRender.push(<NuevoPaquete key={null} nuevoPaquete={this.props.nuevoPaquete}/>);
 
         return (<View style={G.Estilos.programa}>

@@ -77,7 +77,7 @@ export default class Programa extends React.Component {
     }
 
     vincularPaquete = (paquete)=>{
-
+        console.log('vincular ' + paquete.name);
     };
 
     render() {
@@ -86,6 +86,7 @@ export default class Programa extends React.Component {
         const esteSticker = this.state.stickerEditado === -1 ? null : estePaquete.stickers[this.state.stickerEditado];
 
         let renderEsto = (<MenuStickers paquetes={paquetes} abrirPaquete={this.abrirPaquete} vincularPaquete={this.vincularPaquete}
+            hayWasap={false}
             nuevoPaquete={this.nuevoPaquete} borrarPaquete={this.borrarPaquete} actualizarPaquete={this.actualizarPaquete}/>);
         if (esteSticker) {
             renderEsto = (<CreadorDeSticker sticker={esteSticker} paquete={estePaquete} abrirSticker={this.abrirSticker} actualizarPaquete={this.actualizarPaquete}/>);
