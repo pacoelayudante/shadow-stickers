@@ -216,6 +216,7 @@ export default class CreadorDeSticker extends React.Component {
             colorFondo: this.props.sticker.col1 ? this.props.sticker.col1 : '#FFFFFF',
             colorDetalle: this.props.sticker.col2 ? this.props.sticker.col2 : '#000000',
             colorInicial: this.props.sticker.col1 ? this.props.sticker.col1 : '#FFFFFF',
+            hsv: toHsv('white'),
         };
 
         colorFondo = this.state.colorFondo.match(/[A-Za-z0-9]{2}/g).map(function (v) { return parseInt(v, 16); });
@@ -256,20 +257,22 @@ export default class CreadorDeSticker extends React.Component {
     };
     activarEditarColores = (editar, editarColorFondo) => {
         const nuevoEstado = { editarColor: editar };
+        nuevoEstado.colorInicial = this.state.editandoFondo ? this.state.colorFondo : this.state.colorDetalle;
         if (editarColorFondo !== undefined) {
             nuevoEstado.editandoFondo = editarColorFondo;
             nuevoEstado.colorInicial = (editarColorFondo ? this.state.colorFondo : this.state.colorDetalle);
         }
+        nuevoEstado.hsv = toHsv(nuevoEstado.colorInicial);
         this.setState(nuevoEstado);
     }
-    cambiarColor = (nuevoColor) => {
-        nuevoColor = fromHsv(nuevoColor);
+    cambiarColor = (hsv) => {
+        const nuevoColor = fromHsv(hsv);
         if (this.state.editandoFondo) {
-            this.setState({ colorFondo: nuevoColor });
+            this.setState({ colorFondo: nuevoColor, hsv:hsv });
             colorFondo = nuevoColor.match(/[A-Za-z0-9]{2}/g).map(function (v) { return parseInt(v, 16); });
         }
         else {
-            this.setState({ colorDetalle: nuevoColor });
+            this.setState({ colorDetalle: nuevoColor, hsv:hsv });
             colorDetalle = nuevoColor.match(/[A-Za-z0-9]{2}/g).map(function (v) { return parseInt(v, 16); });
         }
         actualizarImagen();
@@ -293,7 +296,7 @@ export default class CreadorDeSticker extends React.Component {
                 sticker.col2 = this.state.colorDetalle;
                 sticker.personaje = this.state.pjActual;
                 sticker.actitud = this.state.varianteActual;
-                return GuardarEstiquer(localUri,paquete);
+                return GuardarEstiquer(localUri,paquete,sticker);
             }).then((nuevoUri)=>{
                 sticker.image_file = nuevoUri;
                 return paquete.stickers[0] === sticker;
@@ -323,7 +326,7 @@ export default class CreadorDeSticker extends React.Component {
         const variantesRender = variantes.map(variante => <Picker.Item key={variante} label={variante} value={variante} />);
 
         const borderSelectedColor = this.state.editandoFondo ? this.state.colorDetalle : this.state.colorFondo;
-        const colorSelected = this.state.editandoFondo ? this.state.colorFondo : this.state.colorDetalle;
+        const colorSelected = this.state.hsv;//this.state.editandoFondo ? this.state.colorFondo : this.state.colorDetalle;
         const transformsCanvas = [G.Transforms.escalaCanvas];
         if (this.state.editarColor) transformsCanvas.unshift(G.Transforms.canvasCorreccionTranslate);
 

@@ -3,6 +3,7 @@ import { View, ScrollView, Text, Button, TextInput, ImageBackground, Image, Touc
 import * as G from './Globales';
 import LinearGradient from 'react-native-linear-gradient';
 import { GetTrayIconUri, GetStickerImageUri } from './ManagerDePaquetes';
+import { BorrarImagenDeSticker } from './ManagerDePaquetes';
 
 const regexEmoji = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g;
 const soloEmojis = (texto) => {
@@ -71,7 +72,7 @@ class EditarSticker extends Component {
             <TouchableHighlight onPress={() => this.props.abrirSticker(this.props.sticker)} style={G.Estilos.editarSticker}>
                 <ImageBackground style={[G.Estilos.editarStickerSub]} imageStyle={G.Estilos.editarStickerImage} onClick={() => this.props.abrirSticker(this.props.sticker)} source={sticker}>
                     <TextInput value={this.state.emojis} style={G.Estilos.emojisInput} onChangeText={this.onChangeEmojis} onEndEditing={this.onEndEditing}/>
-                    <Button title="X" onPress={(ev) => { this.props.borrarSticker(this.props.sticker); }} />
+                    <Button title="X" disabled={this.props.paquete.stickers.length === 1} onPress={(ev) => { this.props.borrarSticker(this.props.sticker); }} />
                 </ImageBackground>
             </TouchableHighlight>
         );
@@ -80,7 +81,9 @@ class EditarSticker extends Component {
 
 export default class EditorPaquete extends React.Component {
     onBorrarSticker = (stickerBorrado) => {
+        if (this.props.paquete.stickers.length === 1) return;// no se puede eliminar el ultimo sticker, ok?
         this.props.paquete.stickers = this.props.paquete.stickers.filter(stick => stick !== stickerBorrado);
+        BorrarImagenDeSticker(this.props.paquete,stickerBorrado);
         this.forceUpdate();
     };
 

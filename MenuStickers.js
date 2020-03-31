@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Image, TouchableHighlight, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, Image, TouchableHighlight, ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import * as G from './Globales';
 import LinearGradient from 'react-native-linear-gradient';
 import { GetTrayIconUri } from './ManagerDePaquetes';
@@ -12,17 +12,23 @@ class NuevoPaquete extends Component {
     }
 }
 class EditarPaqute extends Component {
+    alertStickers = ()=>{
+        Alert.alert('Mas estiquers','En el paquete tiene que haber un minimo de tres estiquers');
+    };
+
     render() {
         const icono = { uri: GetTrayIconUri(this.props.paquete), width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
         const color = this.props.hayWasap ? {} : {backgroundColor:G.Colores.oscuro};
+        const vincularPaquete = this.props.paquete.stickers.length >= 3 ? ()=>{this.props.vincularPaquete(this.props.paquete);} : this.alertStickers;
 
         return (
+
             <TouchableHighlight style={[G.Estilos.editarPaquete]} onPress={this.props.onClick}>
                 <>
                     <Image style={G.Estilos.iconoDeLinea} source={icono} />
                     <Text style={[G.Estilos.textoBase, { flexGrow: 1 }]}>{this.props.paquete.name}</Text>
                     <TouchableOpacity onPress={()=>console.log(this.props.paquete)} style={[G.Estilos.botonConIcono]}><Image style={G.Estilos.iconoContenido} source={G.Img.renombrar} /></TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.props.vincularPaquete(this.props.paquete);}} style={[G.Estilos.botonConIcono,color]}><Image style={G.Estilos.iconoContenido} source={G.Img.vincular} /></TouchableOpacity>
+                    <TouchableOpacity onPress={vincularPaquete} style={[G.Estilos.botonConIcono,color]}><Image style={G.Estilos.iconoContenido} source={G.Img.vincular} /></TouchableOpacity>
                     <TouchableOpacity onPress={()=>{this.props.borrarPaquete(this.props.paquete);}} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.borrar} /></TouchableOpacity>
                 </>
             </TouchableHighlight>

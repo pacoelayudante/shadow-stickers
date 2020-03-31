@@ -26,13 +26,37 @@ export const BuscarListaDePaquetes = () => {
     }).catch(console.error);
 };
 
-export const GuardarEstiquer = (uriOrigen, paquete) => {    
+export const BorrarImagenDeSticker = (paquete,sticker)=>{
+    const uri = GetStickerImageUri(paquete,sticker);
+    return FileSystem.deleteAsync( uri ).then(()=>console.log(`clean up de ${uri}`));
+};
+
+export const BorrarImagenesDePaquete = (paquete)=>{
+    const eliminar = paquete.stickers.map(sticker=> GetStickerImageUri(paquete,sticker) );
+    eliminar.push( GetTrayIconUri(paquete) );
+    console.log(`Borrando ${eliminar.length} imagenes...`);
+    return Promise.all( eliminar.map(uri=>FileSystem.deleteAsync(uri).then(()=>console.log(`clean up de ${uri}`)) ));
+};
+
+export const GuardarEstiquer = (uriOrigen, paquete, sticker) => {    
+    const stickerPrevio = sticker ? GetStickerImageUri(paquete,sticker) : GetTrayIconUri(paquete);
     const imageFile = uriOrigen.split('/').pop();
     const uriCarpeta = FileSystem.documentDirectory + paquete.identifier;
     const uriArchivo = uriCarpeta + '/' + imageFile;
     return FileSystem.copyAsync({from:uriOrigen,to:uriArchivo})
-        .then(()=>imageFile);
+    .then(()=>{
+        console.log('clean up -> ' + uriOrigen);
+        return FileSystem.deleteAsync(uriOrigen);
+    })
+    .then(()=>{
+        if (stickerPrevio) {
+            console.log(`clean up ${sticker ? 'sticker' : 'icono'} previo -> ${stickerPrevio}`);
+            return FileSystem.deleteAsync(stickerPrevio);
+        }
+        else return;
+    }).then(()=>imageFile);
 };
 
-export const GetTrayIconUri = (paquete) => FileSystem.documentDirectory + paquete.identifier + '/' + paquete.tray_image_file;
-export const GetStickerImageUri = (paquete,sticker) => FileSystem.documentDirectory + paquete.identifier + '/' + sticker.image_file;
+export const GetTrayIconUri = (paquete) => paquete.tray_image_file ? FileSystem.documentDirectory + paquete.identifier + '/' + paquete.tray_image_file : '';
+export const GetStickerImageUri = (paquete,sticker) => sticker.image_file ? FileSystem.documentDirectory + paquete.identifier + '/' + sticker.image_file : '';
+export const getFreeDiskStorageAsync = FileSystem.getFreeDiskStorageAsync;
