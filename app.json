@@ -1,4 +1,7 @@
 {
   "name": "ShadowEstiquers",
-  "displayName": "ShadowEstiquers"
+  "displayName": "ShadowEstiquers",
+  "assetBundlePatterns": [
+    "*.png","/skins/**/*.png"
+  ]
 }

@@ -191,6 +191,7 @@ const cargarPersonaje = function (pj, variante, index) {
     const assetFromMod = Asset.fromModule(kinAsset);
     assetFromMod.downloadAsync().then(() => {
             imagenData[index] = assetFromMod;
+            console.log(assetFromMod);
             // imagenData[index] = Image.resolveAssetSource(kinAsset);
             // imagenData[index].localUri = imagenData[index].uri;
             if (gl) {
