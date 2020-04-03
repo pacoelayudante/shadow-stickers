@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, Switch, PanResponder } from 'react-native';
+import { View, TouchableOpacity, Text, Switch, PanResponder, Image } from 'react-native';
 import * as G from './Globales';
 import Slider from '@react-native-community/slider';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +16,7 @@ const colores = ['blanco', 'negro'];
 const maxZoom = 10.0;
 
 const generarStringImagen = function (pj, variante, color) {
-    return `./skins/${pj}_splash/${pj}_${variante}_${color}.png`;
+    return `./skins/${pj}_splash/${pj}_${variante}_${color}.xpng`;
 };
 
 const fragmentShaderSrc = `
@@ -190,9 +190,13 @@ const cargarPersonaje = function (pj, variante, index) {
     }
     const kinAsset = G.Img.Skins[generarStringImagen(pj, variante, colores[index])];
     const assetFromMod = Asset.fromModule(kinAsset);
+    if (assetFromMod.type === 'xpng') assetFromMod.type = 'png';
     assetFromMod.downloadAsync().then(() => {
             imagenData[index] = assetFromMod;
             console.log(assetFromMod);
+            Image.getSize(assetFromMod.localUri,(w,h)=>{
+                assetFromMod.width = w;
+                assetFromMod.height = h;
             // imagenData[index] = Image.resolveAssetSource(kinAsset);
             // imagenData[index].localUri = imagenData[index].uri;
             if (gl) {
@@ -201,6 +205,8 @@ const cargarPersonaje = function (pj, variante, index) {
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagenData[index]);
             }
             cargarPersonaje(pj, variante, index + 1);
+            
+            });
         })
         .catch(console.error);
 

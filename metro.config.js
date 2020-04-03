@@ -4,6 +4,7 @@
  *
  * @format
  */
+const defaultAssetExts = require('metro-config/src/defaults/defaults').assetExts;
 
 module.exports = {
   transformer: {
@@ -13,5 +14,8 @@ module.exports = {
         inlineRequires: false,
       },
     }),
+  },
+  resolver: {
+    assetExts: [...defaultAssetExts, 'xpng'],
   },
 };
