@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, Text, Picker, Switch, PanResponder, Button } from 'react-native';
+import { View, TouchableOpacity, Text, Switch, PanResponder } from 'react-native';
 import * as G from './Globales';
 import Slider from '@react-native-community/slider';
 import LinearGradient from 'react-native-linear-gradient';
 import { ColorPicker, toHsv, fromHsv } from 'react-native-color-picker';
 import { GuardarEstiquer } from './ManagerDePaquetes';
+import { Picker } from '@react-native-community/picker';
 import { GLView } from 'expo-gl';
 import { Asset } from 'react-native-unimodules';
 // import './overrideRemoteImageResolver';
