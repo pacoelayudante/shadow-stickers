@@ -1,0 +1,27 @@
+{
+    "identifier": "",
+    "name": "",
+    "publisher": "Team Guazu",
+    "tray_image_file": "",
+    "image_data_version": "1",
+    "avoid_cache": false,
+    "publisher_email": "team.guazu@gmail.com",
+    "publisher_website": "www.teamguazu.com",
+    "privacy_policy_website": "",
+    "license_agreement_website": "",
+    "color_silueta": "#FFFFFF",
+    "color_detalles": "#000000",
+    "stickers": [
+        {
+            "personaje": "demonhead",
+            "actitud": "base",
+            "col1": "#FFFFFF",
+            "col2": "#000000",
+            "offX": 256.0,
+            "offY": 256.0,
+            "zoom": 1.0,
+            "image_file": "",
+            "emojis": ["💖"]
+        }
+    ]
+}
