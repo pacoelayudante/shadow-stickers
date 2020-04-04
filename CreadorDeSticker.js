@@ -10,7 +10,26 @@ import { GLView } from 'expo-gl';
 import { Asset } from 'react-native-unimodules';
 // import './overrideRemoteImageResolver';
 
-const pjs = ['demonhead', 'shadowsis', 'shaman', 'witch'];
+const nombres = {
+    'demonhead':'Demonhead',
+    'shadowsis':'Shadow Sis',
+    'shaman':'Shaman',
+    'witch':'Aisling',
+    'ninie':'Le Niñe',
+    'dinopianito':'Dinopianito',
+    'ayu':'Ayu',
+    'patata':'Patata',
+    'cholita':'Juanita',
+    'roque':'Roque',
+    'noir':'N.O.I.R.',
+    'samurai':'Ishimine',
+    'shinobi':'Tenguface',
+    'steamgirl':'Simone',
+    'steamboy':'Ismail',
+};
+
+// const pjs = ['demonhead', 'shadowsis', 'shaman', 'witch'];
+const pjs = Object.keys(nombres);
 const variantes = ['base', 'gana', 'pierde'];
 const colores = ['blanco', 'negro'];
 const maxZoom = 10.0;
