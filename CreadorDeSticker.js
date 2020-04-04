@@ -349,7 +349,7 @@ export default class CreadorDeSticker extends React.Component {
     }
 
     render() {
-        const pjsRender = pjs.map(pj => <Picker.Item key={pj} label={pj} value={pj} />);
+        const pjsRender = pjs.map(pj => <Picker.Item key={pj} label={nombres[ pj ]} value={pj} />);
         const variantesRender = variantes.map(variante => <Picker.Item key={variante} label={variante} value={variante} />);
 
         const borderSelectedColor = this.state.editandoFondo ? this.state.colorDetalle : this.state.colorFondo;
