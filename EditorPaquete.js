@@ -67,12 +67,14 @@ class EditarSticker extends Component {
         const uri = GetStickerImageUri(this.props.paquete,this.props.sticker);
         const sticker = { uri: uri, width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
         // const sticker = { uri: this.props.sticker.image_file, width: G.Tamanos.sticker, height: G.Tamanos.sticker };
+        const borrarDesactivado = this.props.paquete.stickers.length > 1 ? {} : {backgroundColor:G.Colores.oscuro};
 
         return (
             <TouchableHighlight onPress={() => this.props.abrirSticker(this.props.sticker)} style={G.Estilos.editarSticker}>
                 <ImageBackground style={[G.Estilos.editarStickerSub]} imageStyle={G.Estilos.editarStickerImage} onClick={() => this.props.abrirSticker(this.props.sticker)} source={sticker}>
                     <TextInput value={this.state.emojis} style={G.Estilos.emojisInput} onChangeText={this.onChangeEmojis} onEndEditing={this.onEndEditing}/>
-                    <Button title="X" disabled={this.props.paquete.stickers.length === 1} onPress={(ev) => { this.props.borrarSticker(this.props.sticker); }} />
+                    <TouchableOpacity onPress={()=>{this.props.borrarSticker(this.props.sticker);}} style={[G.Estilos.botonConIcono,{marginRight:0},borrarDesactivado]}><Image style={G.Estilos.iconoContenido} source={G.Img.borrar} /></TouchableOpacity>
+                    {/* <Button title="X" disabled={this.props.paquete.stickers.length === 1} onPress={(ev) => { this.props.borrarSticker(this.props.sticker); }} /> */}
                 </ImageBackground>
             </TouchableHighlight>
         );

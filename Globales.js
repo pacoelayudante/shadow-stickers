@@ -77,6 +77,7 @@ const Estilos = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'contain',
+        alignSelf: 'center',
     },
     iconoDeLinea: {
         flexGrow: 0,
@@ -103,6 +104,7 @@ const Estilos = StyleSheet.create({
         height: '100%',
         flexDirection: 'row',
         alignItems: 'flex-end',
+        padding: 3,
     },
     editarStickerImage: {
         resizeMode: 'contain',
@@ -117,6 +119,7 @@ const Estilos = StyleSheet.create({
         padding: 0,
         paddingHorizontal: 5,
         backgroundColor: Colores.claro + '60',
+        borderRadius: 6,
     },
     selectorPj:{
         flexGrow: 1,
@@ -125,9 +128,9 @@ const Estilos = StyleSheet.create({
         margin: 3,
     },
     selectorColor:{
-        backgroundColor: 'red',
         height:'100%',
         borderWidth: 2,
+        borderRadius: 9,
     },
     contenedorDibujo:{
         flexGrow: 1,
@@ -137,13 +140,24 @@ const Estilos = StyleSheet.create({
     estiloCanvas:{
         width: Tamanos.stickerLayoutSize,
         height: Tamanos.stickerLayoutSize,
+        backgroundColor: Colores.oscuro,
     },
     sliderZoom:{
         height: Tamanos.anchoLineaBase,
+        flexDirection: 'row',
     },
     colorPicker:{
-        flex : 1,
-    }
+        flex : 1,        
+    },
+    contenedorDeEditarColor:{
+        flexDirection: 'column',
+        flexBasis: Tamanos.anchoLineaBase * 1.5,
+    },
+    miniMostrarColor:{
+        flexGrow: 1,
+        margin: 3,  
+        borderRadius: 3,
+    },
 });
 
 const Transforms = {};
@@ -155,6 +169,7 @@ const Img = {
     borrar: require('./borrar.png'),
     renombrar: require('./renombrar.png'),
     vincular: require('./vincular.png'),
+    zoom: require('./zoom.png'),
     Skins: Skins,
 };
 

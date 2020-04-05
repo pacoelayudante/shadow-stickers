@@ -33,6 +33,7 @@ const pjs = Object.keys(nombres);
 const variantes = ['base', 'gana', 'pierde'];
 const colores = ['blanco', 'negro'];
 const maxZoom = 10.0;
+let bloquearAccionDeGuardar = false;
 
 const generarStringImagen = function (pj, variante, color) {
     return `./skins/${pj}_splash/${pj}_${variante}_${color}.xpng`;
@@ -311,6 +312,8 @@ export default class CreadorDeSticker extends React.Component {
         }
     }
     guardarYVolver = () => {
+        if (bloquearAccionDeGuardar) return;
+        bloquearAccionDeGuardar = true;
         const paquete = this.props.paquete;
         const sticker = this.props.sticker;
         const glYa = gl;
@@ -339,12 +342,17 @@ export default class CreadorDeSticker extends React.Component {
                 return GuardarEstiquer(localUri,paquete);
             }).then((nuevoUri)=>{
                 if (nuevoUri !== null) paquete.tray_image_file = nuevoUri;
+                // this.props.actualizarPaquete(paquete);
+                // this.props.abrirSticker(null);
+                // return nuevoUri;
+            }).catch(console.error)
+            .finally(()=>{
                 this.props.actualizarPaquete(paquete);
                 this.props.abrirSticker(null);
-                // return nuevoUri;
-            }).catch(console.error);
+            });
     }
     componentWillUnmount(){
+        bloquearAccionDeGuardar = false;
         gl = null;
     }
 
@@ -367,15 +375,23 @@ export default class CreadorDeSticker extends React.Component {
                             onValueChange={(val) => this.setState({ varianteActual: val })} >{variantesRender}</Picker></>)}
                     {this.state.editarColor && (<><TouchableOpacity onPress={() => this.activarEditarColores(true, true)} style={[G.Estilos.selectorPj, G.Estilos.selectorColor, { backgroundColor: this.state.colorFondo, borderColor: borderSelectedColor }]} />
                         <TouchableOpacity onPress={() => this.activarEditarColores(true, false)} style={[G.Estilos.selectorPj, G.Estilos.selectorColor, { backgroundColor: this.state.colorDetalle, borderColor: borderSelectedColor }]} /></>)}
-                    <Switch thumbColor={G.Colores.oscuro}
-                        value={this.state.editarColor} onValueChange={(val) => this.activarEditarColores(val)} />
+                    <View style={[G.Estilos.selectorColor,{borderWidth:0}]}>
+                        <TouchableOpacity onPress={()=>this.activarEditarColores(!this.state.editarColor)} style={{flexGrow:1, flexDirection:'row'}}>
+                            <View style={[G.Estilos.miniMostrarColor,{backgroundColor:this.state.colorFondo}]} />
+                            <View style={[G.Estilos.miniMostrarColor,{backgroundColor:this.state.colorDetalle}]} />
+                        </TouchableOpacity>
+                        <Switch thumbColor={G.Colores.oscuro}
+                            value={this.state.editarColor} onValueChange={(val) => this.activarEditarColores(val)} />
+                    </View>
                 </View>
                 <LinearGradient {...this._panResponder.panHandlers} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
                     colors={[G.Colores.negro, G.Colores.oscuro]} style={[G.Estilos.contenedorDibujo]}>
                     <GLView style={G.Estilos.estiloCanvas} transform={transformsCanvas} onContextCreate={createContext} />
                 </LinearGradient>
                 {this.state.editarColor && <ColorPicker color={colorSelected} oldColor={this.state.colorInicial} onColorChange={this.cambiarColor} sliderComponent={Slider} style={G.Estilos.colorPicker} />}
-                {!this.state.editarColor && <Slider style={G.Estilos.sliderZoom} onValueChange={this.onZoom} minimumValue={1.0} maximumValue={maxZoom} value={this.state.zoom} />}
+                {!this.state.editarColor && (<View style={G.Estilos.sliderZoom}>
+                <Image source={G.Img.zoom} style={[G.Estilos.iconoContenido,{height:'75%',width:undefined,aspectRatio:1}]} /><Slider style={{flexGrow:1}} onValueChange={this.onZoom} minimumValue={1.0} maximumValue={maxZoom} value={this.state.zoom} />
+                </View>)}
             </View>
         );
     }
