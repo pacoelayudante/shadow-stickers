@@ -232,6 +232,12 @@ const cargarPersonaje = function (pj, variante, index) {
 
 };
 
+const pDist = (x1,y1,x2,y2)=>{
+    const x = x2-x1;
+    const y = y2-y1;
+    return Math.sqrt( x * x + y * y );
+};
+
 export default class CreadorDeSticker extends React.Component {
     constructor(props) {
         super(props);
@@ -257,6 +263,7 @@ export default class CreadorDeSticker extends React.Component {
 
         this.offXInit = offX;
         this.offYInit = offY;
+        this.touchesDist = null;
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (evt, gestureState) => true,
             onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
@@ -265,8 +272,23 @@ export default class CreadorDeSticker extends React.Component {
             onPanResponderGrant: (evt, gestureState) => {
                 this.offXInit = offX;
                 this.offYInit = offY;
+                this.touchesDist = null;
             },
             onPanResponderMove: (evt, gestureState) => {
+                if (evt.nativeEvent.touches.length > 1) {
+                    const touches = evt.nativeEvent.touches;
+                    if (this.touchesDist === null) {
+                        this.touchesDist = pDist(touches[0].pageX,touches[1].pageY,touches[1].pageX,touches[1].pageY) / zoom;
+                    }
+                    else {
+                        const newDist = pDist(touches[0].pageX,touches[1].pageY,touches[1].pageX,touches[1].pageY);
+                        zoom = Math.max(1.0, Math.min(maxZoom, newDist / this.touchesDist) );
+                    }
+                }
+                else if (this.touchesDist !== null) {
+                    this.touchesDist = null;
+                }
+
                 offX = this.offXInit - gestureState.dx / this.state.zoom;
                 offY = this.offYInit - gestureState.dy / this.state.zoom;
                 actualizarImagen();
@@ -389,9 +411,9 @@ export default class CreadorDeSticker extends React.Component {
                     <GLView style={G.Estilos.estiloCanvas} transform={transformsCanvas} onContextCreate={createContext} />
                 </LinearGradient>
                 {this.state.editarColor && <ColorPicker color={colorSelected} oldColor={this.state.colorInicial} onColorChange={this.cambiarColor} sliderComponent={Slider} style={G.Estilos.colorPicker} />}
-                {!this.state.editarColor && (<View style={G.Estilos.sliderZoom}>
+                {/* {!this.state.editarColor && (<View style={G.Estilos.sliderZoom}>
                 <Image source={G.Img.zoom} style={[G.Estilos.iconoContenido,{height:'75%',width:undefined,aspectRatio:1}]} /><Slider style={{flexGrow:1}} onValueChange={this.onZoom} minimumValue={1.0} maximumValue={maxZoom} value={this.state.zoom} />
-                </View>)}
+                </View>)} */}
             </View>
         );
     }
