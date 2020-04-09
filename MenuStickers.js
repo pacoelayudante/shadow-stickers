@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Image, TouchableHighlight, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { View, ScrollView, Text, Image, TouchableHighlight, ImageBackground, TouchableOpacity, Alert, TextInput } from 'react-native';
 import * as G from './Globales';
 import LinearGradient from 'react-native-linear-gradient';
 import { GetTrayIconUri } from './ManagerDePaquetes';
@@ -12,22 +12,45 @@ class NuevoPaquete extends Component {
     }
 }
 class EditarPaqute extends Component {
+    state = {
+        editandoNombre: false,
+        nombreEditado: this.props.paquete.name,
+    }
+
     alertStickers = ()=>{
-        Alert.alert('Mas estiquers','En el paquete tiene que haber un minimo de tres estiquers');
+        Alert.alert('Mas estiquers','En el paquete tiene que haber un minimo de tres estiquers\n(3 stickers min in pack)');
     };
+
+    nombreCambiadoFin = ()=>{
+        if (this.state.nombreEditado) {
+            this.props.paquete.name = this.state.nombreEditado;
+            this.props.actualizarPaquete(this.props.paquete);
+        }
+        this.setState({editandoNombre:false, nombreEditado:this.props.paquete.name});
+    };
+    nombreCambiando = (cambio)=>{
+        this.setState({nombreEditado:cambio});
+    }
+    editarNombre = ()=>{
+        this.setState({editandoNombre:true});
+        if (this.inputNombre) this.inputNombre.focus();
+    }
 
     render() {
         const icono = { uri: GetTrayIconUri(this.props.paquete), width: G.Tamanos.iconoMenor, height: G.Tamanos.iconoMenor };
         const color = this.props.hayWasap ? {} : {backgroundColor:G.Colores.oscuro};
         const vincularPaquete = this.props.paquete.stickers.length >= 3 ? ()=>{this.props.vincularPaquete(this.props.paquete);} : this.alertStickers;
 
+        const nombrePaquete = (<TextInput ref={(input)=>{this.inputNombre = input;}} style={[G.Estilos.textoBase, { flexGrow: 1 }]} value={this.state.nombreEditado}
+            onChangeText={this.nombreCambiando} onEndEditing={this.nombreCambiadoFin} editable={this.state.editandoNombre}/>);
+
         return (
 
             <TouchableHighlight style={[G.Estilos.editarPaquete]} onPress={this.props.onClick}>
                 <>
                     <Image style={G.Estilos.iconoDeLinea} source={icono} />
-                    <Text style={[G.Estilos.textoBase, { flexGrow: 1 }]}>{this.props.paquete.name}</Text>
-                    <TouchableOpacity onPress={()=>console.log(this.props.paquete)} style={[G.Estilos.botonConIcono]}><Image style={G.Estilos.iconoContenido} source={G.Img.renombrar} /></TouchableOpacity>
+                    {nombrePaquete}
+                    <TouchableOpacity onPress={this.editarNombre} style={[G.Estilos.botonConIcono]}><Image style={G.Estilos.iconoContenido} source={G.Img.renombrar} /></TouchableOpacity>
                     <TouchableOpacity onPress={vincularPaquete} style={[G.Estilos.botonConIcono,color]}><Image style={G.Estilos.iconoContenido} source={G.Img.vincular} /></TouchableOpacity>
                     <TouchableOpacity onPress={()=>{this.props.borrarPaquete(this.props.paquete);}} style={G.Estilos.botonConIcono}><Image style={G.Estilos.iconoContenido} source={G.Img.borrar} /></TouchableOpacity>
                 </>
@@ -39,7 +62,7 @@ class EditarPaqute extends Component {
 export default class MenuStickers extends React.Component {
     render() {
         let paquetesRender = this.props.paquetes.map(paquete => <EditarPaqute key={paquete.identifier} paquete={paquete} vincularPaquete={this.props.vincularPaquete}
-            onClick={() => this.props.abrirPaquete(paquete)} borrarPaquete={this.props.borrarPaquete} hayWasap={this.props.hayWasap}/>);
+            onClick={() => this.props.abrirPaquete(paquete)} borrarPaquete={this.props.borrarPaquete} hayWasap={this.props.hayWasap} actualizarPaquete={this.props.actualizarPaquete}/>);
         paquetesRender.push(<NuevoPaquete key={null} nuevoPaquete={this.props.nuevoPaquete}/>);
 
         return (<View style={G.Estilos.programa}>
